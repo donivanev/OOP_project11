@@ -4,10 +4,8 @@
 class Unavailable
 {
     int number;
-    DateTime from;
-    DateTime to;
-    string note;
-    string status;
+    DateTime from, to;
+    string note, status;
 
     public:
     void change(int num, DateTime d1, DateTime d2, string _note)

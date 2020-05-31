@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vector>
 #include "Room.h"
 #include "Unavailable.h"
@@ -19,7 +18,6 @@ class ArrayOfRooms
     public:
 
     Room& operator [] (int i);
-    //bool contains(int r, DateTime f, DateTime t);
     void add(int r, DateTime f, DateTime t, string n, int beds);
     void check(DateTime date, string today);
     void release(int number);

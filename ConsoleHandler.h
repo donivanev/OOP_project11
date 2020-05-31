@@ -1,6 +1,5 @@
 #pragma once
 #pragma warning(disable:4996)
-
 #include <fstream>
 #include <algorithm>
 #include <string>
@@ -22,10 +21,8 @@ class ConsoleHandler
 
     void open(string path);
     void close();
-
     void save();
     void saveAs(string path);
-
     void exit();
     void help();
 

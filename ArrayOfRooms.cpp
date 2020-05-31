@@ -1,19 +1,5 @@
 #include "ArrayOfRooms.h"
 
-/*bool ArrayOfRooms::contains(int r, DateTime f, DateTime t)
-{
-    for (int i = 0; i < 300; i++)
-    {
-        if (rooms[i].getNumber() == r &&
-            ((rooms[i].getDateFrom() <= f && rooms[i].getDateTo() >= f) &&
-                (rooms[i].getDateFrom() <= t && rooms[i].getDateTo() >= t)))
-        {
-            return true;
-        }
-    }
-    return false;
-}*/
-
 Room& ArrayOfRooms::operator[](int i)
 {
     return rooms[i];
@@ -59,14 +45,6 @@ void ArrayOfRooms::add(int r, DateTime f, DateTime t, string n, int g)
             }
         }
     }
-    //if (!contains(r, f, t))
-    //{
-        //rooms.push_back(newRoom);
-    //}
-    //else
-    //{
-        //cout << "This room is already rented." << endl;
-    //}
 }
 
 void ArrayOfRooms::check(DateTime date, string today)
@@ -132,16 +110,16 @@ void ArrayOfRooms::list(DateTime dateFrom, DateTime dateTo)
         if ((rooms[i].getDateFrom() <= dateFrom && rooms[i].getDateTo() >= dateFrom) &&
             (rooms[i].getDateFrom() <= dateTo && rooms[i].getDateTo() >= dateTo))
         {
-            cout << dateTo - dateFrom << endl;
+            cout << "Days in room " << i << " : " << dateTo - dateFrom << endl;
         }
         else if((rooms[i].getDateFrom() >= dateFrom && rooms[i].getDateTo() >= dateFrom)&&
             (rooms[i].getDateFrom() <= dateTo && rooms[i].getDateTo() <= dateTo))
         {
-            cout << daysInRoom[i] << endl;
+            cout << "Days in room " << i << " : " << daysInRoom[i] << endl;
         }
         else
         {
-            cout << 0 << endl;
+            cout << "Days in room " << i << " : " << 0 << endl;
         }
     }
 }
@@ -183,7 +161,68 @@ void ArrayOfRooms::findRoom(int number, DateTime dateFrom, DateTime dateTo)
 
 void ArrayOfRooms::findVIPRoom(int number, DateTime dateFrom, DateTime dateTo)
 {
+    bool isBetween, isOutside;
 
+    for (int i = 0; i < sizeOfRooms; i++)
+    {
+        bool isBetween = ((rooms[i].getDateFrom() <= dateFrom && rooms[i].getDateTo() >= dateFrom) &&
+            (rooms[i].getDateFrom() <= dateTo && rooms[i].getDateTo() >= dateTo));
+
+        bool isOutside = ((rooms[i].getDateFrom() >= dateFrom && rooms[i].getDateTo() >= dateFrom) &&
+            (rooms[i].getDateFrom() <= dateTo && rooms[i].getDateTo() <= dateTo));
+
+        if (rooms[i].getGuests() == number && (isBetween || isOutside) && status[i] != "checkedin")
+        {
+            cout << "Room number " << rooms[i].getNumber() << " is free with " << number << "beds." << endl;
+        }
+        else
+        {
+            if (rooms[i].getGuests() != number)
+            {
+                //cout << "Room number " << rooms[i].getNumber() << " hasn't got that much beds!" << endl;
+            }
+            else if (status[i] == "checkedin" && (isBetween || isOutside))
+            {
+                //the main logic should be here
+                cout << "Room number " << rooms[i].getNumber() << " is already rented from "
+                    << rooms[i].getDateFrom() << " to " << rooms[i].getDateTo() << endl;
+                /*cout << "Starting VIP algorithm..." << endl;
+                int counter = 0, index = 0;
+                int vI[2];
+                string vS[2];
+
+                for (int j = 0; j < sizeOfRooms; j++)
+                {
+                    if (counter == 2)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (status[j] == "checkedin")
+                        {
+                            vI[index] = rooms[j].getNumber();
+                            vS[index] = rooms[j].getNote();
+                            counter++;
+                            index++;
+                        }
+                    }
+                }
+
+                for (int k = 0; k < 2; k++)
+                {
+                    cout << "Room number " << vI[k] << " which was rented by" << vS[k] << endl;
+                }
+                cout << "These tenants will be asked to check out their rooms because of a VIP guest." << endl;*/
+                cout << "The tenant" << rooms[i].getNote() << " from room number " << rooms[i].getNumber()   
+                     << " will be asked to check out because of a VIP guest." << endl;
+            }
+            else
+            {
+                cout << "On this date room number " << rooms[i].getNumber() << " is free." << endl;
+            }
+        }
+    }
 }
 
 void ArrayOfRooms::freeze(int _number, DateTime _dateFrom, DateTime _dateTo, string _note)
@@ -203,7 +242,7 @@ ostream& operator << (ostream& output, const ArrayOfRooms& rooms)
 {
     for (int i = 0; i < sizeOfRooms; i++)
     {
-        cout << rooms.rooms[i];
+        output << rooms.rooms[i] << endl;
     }
     return output;
 }

@@ -105,7 +105,6 @@ void ConsoleHandler::checkFunction(string firstWord, string command)
                     hotel.checkin(stoi(vector.at(1)), dateFrom, dateTo, note, 0);
                 }
             }
-            //hotel.printRooms();
         }
     }
     else if (firstWord == "checkout")
@@ -176,7 +175,7 @@ void ConsoleHandler::checkFunction(string firstWord, string command)
         toDate(vector.at(3), y2, m2, d2);
         DateTime dateFrom(y1, m1, d1);
         DateTime dateTo(y2, m2, d2);
-        //hotel.findExclamation(stoi(vector.at(1)), dateFrom, dateTo);
+        hotel.findExclamation(stoi(vector.at(1)), dateFrom, dateTo);
     }
     else if (firstWord == "find")
     {
@@ -238,6 +237,8 @@ void ConsoleHandler::open(string path)
             f_fileName = token;
             token = strtok(NULL, "\\");
         }   
+
+        if (token != nullptr) delete[] token;
     } 
 }
 
@@ -268,7 +269,7 @@ void ConsoleHandler::save()
     {
         f_inout.clear();
 
-        //f_inout << hotel;
+        f_inout << hotel;
         cout << "Successfully saved in "<< f_fileName << endl;
     }
 }
@@ -279,7 +280,7 @@ void ConsoleHandler::saveAs(string path)
 
     if(f_filePath == path)
     {   
-        //f_inout << hotel;
+        f_inout << hotel;
     }
     else
     {
@@ -294,7 +295,7 @@ void ConsoleHandler::saveAs(string path)
         {
             newstream.clear();
 
-            //newstream << hotel;
+            newstream << hotel;
 
             char* token;
             token = strtok(&PATH[0], "\\");
@@ -308,8 +309,72 @@ void ConsoleHandler::saveAs(string path)
 
             cout << "Successfully saved in "<< currentName << endl;
             newstream.close();
+            if(token != nullptr) delete[] token;
         }
     }
+    /*if (path == f_filePath)
+    {
+        f_inout << f_fileName << endl;
+        for (int i = 0; i < 10; i++)
+        {
+            f_inout << hotel[i];
+        }
+
+        cout << "Successfully saved." << endl;
+    }
+    else
+    {
+        fstream newstream(path);
+        if (!newstream.is_open())
+        {
+            newstream.close();
+            ofstream openFile(path);
+            if (!openFile.is_open())
+            {
+                cout << "file could not open" << endl;
+                return;
+            }
+            else
+            {
+                openFile.close();
+                newstream.open(path);
+                if (!newstream.is_open())
+                {
+                    cout << "Not a valid path fo saving data." << endl;
+                    return;
+                }
+                else
+
+                {
+                    newstream << f_fileName << endl;
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        newstream << hotel[i] << endl;
+                    }
+
+                    cout << "Successfully saved in file" << endl;
+                    newstream.close();
+                }
+            }
+        }
+        else
+        {
+            newstream.close();
+            newstream.open(path, ios::out | ios::trunc);
+            newstream.close();
+            newstream.open(path);
+
+
+            for (int i = 0; i < 10; i++)
+            {
+                newstream << hotel[i] << endl;
+            }
+
+            cout << "Successfully saved in file" << endl;
+            newstream.close();
+        }
+    }*/
 }
 
 void ConsoleHandler::exit()
@@ -335,32 +400,36 @@ void ConsoleHandler::help()
 
 void ConsoleHandler::processCommand(string firstWord, string command)
 {   
-    string commandName, path = "";
-    char* token;
-    string _command = command;
+    //char* token;
+    //token = strtok(&command[0], " ");
+    //commandName = token;
 
-    token = strtok(&command[0], " ");
+    string  _command = command, path = "";
+    vector<string> v;
 
-    commandName = token;
-
-    token = strtok(NULL, " ");
-
-    if(token != NULL)
-    {
-        path = token;
-    }
-
-    if (commandName == "open")
+    if (firstWord == "open")
     {  
+        splitString(command, v);
+        path = v[1];
         f_filePath = path;
         open(path);  
     }
-    else if (commandName == "save")
+    else if (firstWord == "save")
     {
         save();
     }
-    else if (commandName == "saveas")
+    else if (firstWord == "saveas")
     {
+        int place = 0;
+        string token, delimeter = " ";
+
+        place = _command.find(delimeter);
+        token = _command.substr(0, place);
+        v.push_back(token);
+        _command.erase(0, place + delimeter.length());
+        v.push_back(_command);
+
+        path = v[1];
         if(path == "")
         {
             cout << "Invalid command.Try again!";
@@ -370,15 +439,15 @@ void ConsoleHandler::processCommand(string firstWord, string command)
             saveAs(path);
         }
     }
-    else if (commandName == "close")
+    else if (firstWord == "close")
     {
         close();
     }
-    else if (commandName == "help")
+    else if (firstWord == "help")
     {
         help();
     }
-    else if (commandName == "exit")
+    else if (firstWord == "exit")
     {
         exit();
     }

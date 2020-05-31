@@ -40,6 +40,11 @@ int Room::getGuests()
     return this->guests;
 }
 
+string Room::getNote()
+{
+	return this->note;
+}
+
 ostream& operator << (ostream& output, const Room& room)
 {
     output << "Room number: " << room.nomer << '\n' << "This room is rented from " 

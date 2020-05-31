@@ -1,5 +1,10 @@
 #include "HotelClass.h"
 
+Room& Hotel::operator[](int i)
+{
+    return arrayOfRooms[i];
+}
+
 void Hotel::checkin(int room, DateTime from, DateTime to, string note, int guests)
 {
     arrayOfRooms.add(room, from, to, note, guests);
@@ -35,13 +40,13 @@ void Hotel::unavailable(int number, DateTime from, DateTime to, string note)
     arrayOfRooms.freeze(number, from, to, note);
 }
 
-ostream& operator << (ostream& output, const Hotel& hotel)
-{
-    output << hotel;
-    return output;
-}
-
 void Hotel::printRooms()
 {
     arrayOfRooms.print();
+}
+
+ostream& operator << (ostream& output, const Hotel& hotel)
+{
+    output << hotel.arrayOfRooms;
+    return output;
 }
